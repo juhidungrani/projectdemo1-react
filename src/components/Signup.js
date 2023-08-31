@@ -88,11 +88,11 @@ const Signup = () => {
               />
             </div>
           </div>
-
-          <button type="submit" style={{ width: "100%", maxWidth: "200px" }}>
-  
-            Register
-          </button>
+          <div className="col-auto m-3 mb-4 mt-1">
+            <button type="submit" className="form-submit custom-button">
+              Register
+            </button>
+          </div>
         </form>
       </section>
 
