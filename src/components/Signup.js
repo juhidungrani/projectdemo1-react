@@ -27,6 +27,9 @@ const Signup = () => {
       );
       alert(response.data.message);
       history.push("/");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
     } catch (error) {
       if (error.response && error.response.data) {
         setErrorMessage(error.response.data.message);
