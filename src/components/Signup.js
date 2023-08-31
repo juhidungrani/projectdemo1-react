@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
+import axios from "axios";
 
 const Signup = () => {
   const history = useHistory();
+  const [errorMessage, setErrorMessage] = useState("");
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -19,50 +21,26 @@ const Signup = () => {
     const { username, email, password } = user;
 
     try {
-      const res = await fetch(
+      const response = await axios.post(
         "https://projectdemobackend1.onrender.com/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-          }),
-        }
+        { username, email, password }
       );
-
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await res.json();
-
-      // if (data.status === 422 || !data) {
-      //   window.alert("Invalid Registration");
-      if (data.status === 200) {
-        console.log(res);
-        alert("Registered successfully!");
-        history.push("/");
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      } else {
-        window.alert("Registration Unsuccessful");
-        history.push("/");
-      }
+      alert(response.data.message);
+      history.push("/");
     } catch (error) {
-      console.error("Error:", error);
-      window.alert("Error during registration");
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("An error occurred");
+      }
+      console.error(error);
     }
   };
 
   return (
     <>
       <section className="sign-in">
-        <form method="POST">
+        <form onSubmit={PostData}>
           <div className="form-group" class="mb-2 row mt-2 m-1">
             <label htmlFor="username" className="col-sm-1 col-form-label">
               Username
@@ -111,16 +89,10 @@ const Signup = () => {
             </div>
           </div>
 
-          <div className="col-auto m-3 mb-4 mt-1">
-            <input
-              type="submit"
-              name="signup"
-              id="signup"
-              className="form-submit custom-button"
-              value="Register"
-              onClick={PostData}
-            />
-          </div>
+          <button type="submit" style={{ width: "100%", maxWidth: "200px" }}>
+  
+            Register
+          </button>
         </form>
       </section>
 
